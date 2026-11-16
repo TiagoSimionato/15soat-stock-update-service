@@ -31,6 +31,7 @@ const mockStockService = () => ({
   deleteStock: jest.fn(),
   listStockByResourceId: jest.fn(),
   listStocks: jest.fn(),
+  updateStock: jest.fn(),
 });
 
 describe('StockController', () => {
@@ -114,6 +115,30 @@ describe('StockController', () => {
 
       expect(res.status).toHaveBeenCalledWith(404);
       expect(res.send).toHaveBeenCalledWith({ message: 'Recurso não foi encontrado.' });
+    });
+  });
+
+  describe('updateStock', () => {
+    it('should return 201 when stock is updated successfully', async () => {
+      service.updateStock.mockResolvedValue({ affected: 1, raw: {} });
+      const res = mockResponse();
+
+      await controller.updateStock(1, mockStockDTO, res);
+
+      expect(service.updateStock).toHaveBeenCalledWith(1, mockStockDTO);
+      expect(service.updateStock).toHaveBeenCalledTimes(1);
+      expect(res.status).toHaveBeenCalledWith(201);
+      expect(res.send).toHaveBeenCalledWith({ message: 'Estoque atualizado com sucesso.' });
+    });
+
+    it('should return 404 when no stock is affected', async () => {
+      service.updateStock.mockResolvedValue({ affected: 0, raw: {} });
+      const res = mockResponse();
+
+      await controller.updateStock(99, mockStockDTO, res);
+
+      expect(res.status).toHaveBeenCalledWith(404);
+      expect(res.send).toHaveBeenCalledWith({ message: 'Estoque não foi encontrado.' });
     });
   });
 

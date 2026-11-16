@@ -1,6 +1,6 @@
 import type { Response } from 'express';
-import { Body, Controller, Delete, Get, Inject, Param, ParseIntPipe, Post, Res } from '@nestjs/common';
-import { DeleteResult } from 'typeorm';
+import { Body, Controller, Delete, Get, Inject, Param, ParseIntPipe, Post, Put, Res } from '@nestjs/common';
+import { DeleteResult, UpdateResult } from 'typeorm';
 import { StockDTO, StockResponse } from '../models/stock.model';
 import { StockService } from '../services/stock.service';
 
@@ -39,6 +39,15 @@ export class StockController {
       return res.status(404).send({ message: 'Recurso não foi encontrado.' });
 
     return res.status(200).send(stock);
+  }
+
+  @Put(':id')
+  async updateStock(@Param('id', ParseIntPipe) stockId: number, @Body() stock: StockDTO, @Res() res: Response) {
+    const update: UpdateResult = await this.stockService.updateStock(stockId, stock);
+    if (update.affected === 0)
+      return res.status(404).send({ message: 'Estoque não foi encontrado.' });
+
+    res.status(201).send({ message: 'Estoque atualizado com sucesso.' });
   }
 
   @Delete(':id')

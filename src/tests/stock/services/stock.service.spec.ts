@@ -35,6 +35,7 @@ const mockRepository = () => ({
   delete: jest.fn(),
   find: jest.fn(),
   findOne: jest.fn(),
+  update: jest.fn(),
   upsert: jest.fn(),
 });
 
@@ -225,6 +226,32 @@ describe('StockService', () => {
       repository.findOne.mockRejectedValue(new Error('DB error'));
 
       await expect(service.listStockByStockId(1)).rejects.toThrow('DB error');
+    });
+  });
+
+  describe('updateStock', () => {
+    it('should update a stock and return the UpdateResult', async () => {
+      repository.update.mockResolvedValue({ affected: 1, raw: {} });
+
+      const result = await service.updateStock(1, mockStockDTO);
+
+      expect(repository.update).toHaveBeenCalledWith({ id: 1 }, mockStockDTO);
+      expect(repository.update).toHaveBeenCalledTimes(1);
+      expect(result).toEqual({ affected: 1, raw: {} });
+    });
+
+    it('should return affected: 0 when stock does not exist', async () => {
+      repository.update.mockResolvedValue({ affected: 0, raw: {} });
+
+      const result = await service.updateStock(99, mockStockDTO);
+
+      expect(result).toEqual({ affected: 0, raw: {} });
+    });
+
+    it('should propagate errors thrown by update', async () => {
+      repository.update.mockRejectedValue(new Error('DB error'));
+
+      await expect(service.updateStock(1, mockStockDTO)).rejects.toThrow('DB error');
     });
   });
 
