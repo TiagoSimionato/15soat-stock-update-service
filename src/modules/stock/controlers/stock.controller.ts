@@ -23,6 +23,15 @@ export class StockController {
     return res.status(200).send(arrStocks);
   }
 
+  @Get('/:id')
+  async listStockByStockId(@Param('id', ParseIntPipe) resourceId: number, @Res() res: Response) {
+    const stock: null | StockResponse = await this.stockService.listStockByStockId(resourceId);
+    if (!stock)
+      return res.status(404).send({ message: 'Recurso não foi encontrado.' });
+
+    return res.status(200).send(stock);
+  }
+
   @Get('/resource/:id')
   async listStockByResourceId(@Param('id', ParseIntPipe) resourceId: number, @Res() res: Response) {
     const stock: null | StockResponse = await this.stockService.listStockByResourceId(resourceId);
