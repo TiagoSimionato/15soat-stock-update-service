@@ -235,7 +235,7 @@ describe('StockService', () => {
 
       const result = await service.updateStock(1, mockStockDTO);
 
-      expect(repository.update).toHaveBeenCalledWith({ id: 1 }, mockStockDTO);
+      expect(repository.update).toHaveBeenCalledWith({ id: 1 }, { amount: 10, resource: { id: 1 } });
       expect(repository.update).toHaveBeenCalledTimes(1);
       expect(result).toEqual({ affected: 1, raw: {} });
     });
