@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { DeleteResult, EntityManager, Repository } from 'typeorm';
+import { DeleteResult, EntityManager, Repository, UpdateResult } from 'typeorm';
 import { Stock } from '../entities/stock.entity';
 import { StockDTO, StockResponse } from '../models/stock.model';
 import { stockResponseFormatter } from '../utils/stockResponse.helper';
@@ -56,6 +56,10 @@ export class StockService {
     });
 
     return stock ? stockResponseFormatter(stock) : null;
+  }
+
+  async updateStock(id: number, stock: StockDTO): Promise<UpdateResult> {
+    return await this.stockRepository.update({ id }, stock);
   }
 
   async deleteStock(stockId: number): Promise<DeleteResult> {
