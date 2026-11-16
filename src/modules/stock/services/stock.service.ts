@@ -59,7 +59,7 @@ export class StockService {
   }
 
   async updateStock(id: number, stock: StockDTO): Promise<UpdateResult> {
-    return await this.stockRepository.update({ id }, stock);
+    return await this.stockRepository.update({ id }, { amount: stock.amount, resource: { id: stock.resource_id } });
   }
 
   async deleteStock(stockId: number): Promise<DeleteResult> {
