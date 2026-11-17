@@ -4,7 +4,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { dataSourceConfigs } from './configs/dataSourceConfigs';
 import { AuthModule } from './modules/auth/auth.module';
 import { FallbackModule } from './modules/fallback/fallback.module';
-import { HealthController } from './modules/health/health/health.controller';
+import { HealthController } from './modules/health/controllers/health.controller';
 import { ResourcesModule } from './modules/resources/resources.module';
 import { StockModule } from './modules/stock/stock.module';
 
